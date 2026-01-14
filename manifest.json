@@ -65,7 +65,7 @@
                     "id": "TaskPaneRuntime",
                     "type": "general",
                     "code": {
-                        "page": "https://localhost:3000/taskpane.html"
+                        "page": "https://otsukasean.github.io/outlook-ai-translator/taskpane.html"
                     },
                     "lifetime": "short",
                     "actions": [
@@ -81,8 +81,8 @@
                     "id": "CommandsRuntime",
                     "type": "general",
                     "code": {
-                        "page": "https://localhost:3000/commands.html",
-                        "script": "https://localhost:3000/commands.js"
+                        "page": "https://otsukasean.github.io/outlook-ai-translator/commands.html",
+                        "script": "https://otsukasean.github.io/outlook-ai-translator/commands.js"
                     },
                     "lifetime": "short",
                     "actions": [
@@ -109,15 +109,15 @@
                                     "icons": [
                                         {
                                             "size": 16,
-                                            "url": "https://localhost:3000/assets/icon-16.png"
+                                            "url": "https://otsukasean.github.io/outlook-ai-translator/assets/icon-16.png"
                                         },
                                         {
                                             "size": 32,
-                                            "url": "https://localhost:3000/assets/icon-32.png"
+                                            "url": "https://otsukasean.github.io/outlook-ai-translator/assets/icon-32.png"
                                         },
                                         {
                                             "size": 80,
-                                            "url": "https://localhost:3000/assets/icon-80.png"
+                                            "url": "https://otsukasean.github.io/outlook-ai-translator/assets/icon-80.png"
                                         }
                                     ],
                                     "controls": [
@@ -128,15 +128,15 @@
                                             "icons": [
                                                 {
                                                     "size": 16,
-                                                    "url": "https://localhost:3000/assets/icon-16.png"
+                                                    "url": "https://otsukasean.github.io/outlook-ai-translator/assets/icon-16.png"
                                                 },
                                                 {
                                                     "size": 32,
-                                                    "url": "https://localhost:3000/assets/icon-32.png"
+                                                    "url": "https://otsukasean.github.io/outlook-ai-translator/assets/icon-32.png"
                                                 },
                                                 {
                                                     "size": 80,
-                                                    "url": "https://localhost:3000/assets/icon-80.png"
+                                                    "url": "https://otsukasean.github.io/outlook-ai-translator/assets/icon-80.png"
                                                 }
                                             ],
                                             "supertip": {
@@ -152,15 +152,15 @@
                                             "icons": [
                                                 {
                                                     "size": 16,
-                                                    "url": "https://localhost:3000/assets/icon-16.png"
+                                                    "url": "https://otsukasean.github.io/outlook-ai-translator/assets/icon-16.png"
                                                 },
                                                 {
                                                     "size": 32,
-                                                    "url": "https://localhost:3000/assets/icon-32.png"
+                                                    "url": "https://otsukasean.github.io/outlook-ai-translator/assets/icon-32.png"
                                                 },
                                                 {
                                                     "size": 80,
-                                                    "url": "https://localhost:3000/assets/icon-80.png"
+                                                    "url": "https://otsukasean.github.io/outlook-ai-translator/assets/icon-80.png"
                                                 }
                                             ],
                                             "supertip": {
