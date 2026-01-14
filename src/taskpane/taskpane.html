@@ -31,11 +31,6 @@
         <label id="openaiApiKeyLabel" for="openaiApiKey" style="display: block; font-size: 13px; margin-bottom: 5px;">OpenAI API Key (用於 GPT-4o-mini):</label>
         <input type="password" id="openaiApiKey" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; font-size: 13px;" placeholder="sk-..." />
     </div>
-    <div style="margin-bottom: 15px;">
-        <label id="secondLLMApiKeyLabel" for="secondLLMApiKey" style="display: block; font-size: 13px; margin-bottom: 5px;">第二個 LLM 的 API Key (例如 Claude, Gemini, 或另一個 OpenAI key):</label>
-        <input type="password" id="secondLLMApiKey" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; font-size: 13px;" placeholder="sk-..." />
-    </div>
-
     <div id="originalContentLabel" class="section-title">信件內容同步 (原文)</div>
     <textarea id="originalText" rows="8" placeholder="正在自動同步郵件內容..."></textarea>
 
@@ -52,6 +47,10 @@
     <textarea id="translatedText" rows="8" placeholder="翻譯結果會顯示在這裡..."></textarea>
     <button id="insertBtn" class="btn" style="display:none;">插入翻譯結果 1 至郵件</button>
 
+    <div style="margin-bottom: 15px;">
+        <label id="secondLLMApiKeyLabel" for="secondLLMApiKey" style="display: block; font-size: 13px; margin-bottom: 5px;">第二個 LLM 的 API Key (例如 Claude, Gemini, 或另一個 OpenAI key):</label>
+        <input type="password" id="secondLLMApiKey" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; font-size: 13px;" placeholder="sk-..." />
+    </div>
     <div id="translationResultLabel2" class="section-title">翻譯結果 2 (Claude)</div>
     <textarea id="translatedText2" rows="8" placeholder="翻譯結果會顯示在這裡..."></textarea>
     <button id="insertBtn2" class="btn" style="display:none;">插入翻譯結果 2 至郵件</button>
