@@ -19,20 +19,27 @@
     </style>
 </head>
 <body>
-    <div class="section-title">請填寫 API Key (避免硬寫在程式碼中)</div>
+    <div id="uiLanguageSection" class="section-title">UI Language</div>
+    <select id="uiLanguageSelector" style="margin-bottom: 15px;">
+        <option value="English">English</option>
+        <option value="Japanese">日本語</option>
+        <option value="Chinese" selected>繁體中文</option>
+    </select>
+
+    <div id="apiKeySectionTitle" class="section-title">請填寫 API Key (避免硬寫在程式碼中)</div>
     <div style="margin-bottom: 10px;">
-        <label for="openaiApiKey" style="display: block; font-size: 13px; margin-bottom: 5px;">OpenAI API Key (用於 GPT-4o-mini):</label>
+        <label id="openaiApiKeyLabel" for="openaiApiKey" style="display: block; font-size: 13px; margin-bottom: 5px;">OpenAI API Key (用於 GPT-4o-mini):</label>
         <input type="password" id="openaiApiKey" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; font-size: 13px;" placeholder="sk-..." />
     </div>
     <div style="margin-bottom: 15px;">
-        <label for="secondLLMApiKey" style="display: block; font-size: 13px; margin-bottom: 5px;">第二個 LLM 的 API Key (例如 Claude, Gemini, 或另一個 OpenAI key):</label>
+        <label id="secondLLMApiKeyLabel" for="secondLLMApiKey" style="display: block; font-size: 13px; margin-bottom: 5px;">第二個 LLM 的 API Key (例如 Claude, Gemini, 或另一個 OpenAI key):</label>
         <input type="password" id="secondLLMApiKey" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; font-size: 13px;" placeholder="sk-..." />
     </div>
 
     <div id="originalContentLabel" class="section-title">信件內容同步 (原文)</div>
     <textarea id="originalText" rows="8" placeholder="正在自動同步郵件內容..."></textarea>
 
-    <div class="section-title">選擇翻譯語言</div>
+    <div id="translationLanguageLabel" class="section-title">選擇翻譯語言</div>
     <select id="languageSelector" class="btn">
         <option value="Japanese">日文</option>
         <option value="English">英文</option>

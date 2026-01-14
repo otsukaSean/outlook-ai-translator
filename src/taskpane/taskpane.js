@@ -5,7 +5,12 @@ const OPENAI_API_ENDPOINT = "https://api.openai.com/v1/chat/completions";
 const translations = {
   "Chinese": {
     "title": "AI 翻譯助手",
+    "uiLanguageSection": "UI 語言",
+    "apiKeySectionTitle": "請填寫 API Key (避免硬寫在程式碼中)",
+    "openaiApiKeyLabel": "OpenAI API Key (用於 GPT-4o-mini):",
+    "secondLLMApiKeyLabel": "第二個 LLM 的 API Key (例如 Claude, Gemini, 或另一個 OpenAI key):",
     "originalContentLabel": "信件內容同步 (原文)",
+    "translationLanguageLabel": "選擇翻譯語言",
     "translateButton": "使用 GPT-4o-mini 翻譯",
     "translationResultLabel1": "翻譯結果 1 (GPT-4o-mini)",
     "translationResultLabel2": "翻譯結果 2 (Claude)",
@@ -27,7 +32,12 @@ const translations = {
   },
   "Japanese": {
     "title": "AI 翻訳アシスタント",
+    "uiLanguageSection": "UI言語",
+    "apiKeySectionTitle": "APIキーを入力してください（コードにハードコーディングしないでください）",
+    "openaiApiKeyLabel": "OpenAI APIキー (GPT-4o-mini用):",
+    "secondLLMApiKeyLabel": "第二のLLMのAPIキー (例: Claude, Gemini, または別のOpenAIキー):",
     "originalContentLabel": "メール内容同期 (原文)",
+    "translationLanguageLabel": "翻訳言語を選択",
     "translateButton": "GPT-4o-miniで翻訳",
     "translationResultLabel1": "翻訳結果 1 (GPT-4o-mini)",
     "translationResultLabel2": "翻訳結果 2 (Claude)",
@@ -49,7 +59,12 @@ const translations = {
   },
   "English": {
     "title": "AI Translation Assistant",
+    "uiLanguageSection": "UI Language",
+    "apiKeySectionTitle": "Please fill in API Key (avoid hardcoding in the source code)",
+    "openaiApiKeyLabel": "OpenAI API Key (for GPT-4o-mini):",
+    "secondLLMApiKeyLabel": "API Key for the second LLM (e.g., Claude, Gemini, or another OpenAI key):",
     "originalContentLabel": "Email Content Sync (Original)",
+    "translationLanguageLabel": "Select Translation Language",
     "translateButton": "Translate with GPT-4o-mini",
     "translationResultLabel1": "Translation Result 1 (GPT-4o-mini)",
     "translationResultLabel2": "Translation Result 2 (Claude)",
@@ -75,7 +90,12 @@ function updateUIText(language) {
   const lang = translations[language] || translations["English"];
 
   document.title = lang.title;
+  document.getElementById("uiLanguageSection").innerText = lang.uiLanguageSection;
+  document.getElementById("apiKeySectionTitle").innerText = lang.apiKeySectionTitle;
+  document.getElementById("openaiApiKeyLabel").innerText = lang.openaiApiKeyLabel;
+  document.getElementById("secondLLMApiKeyLabel").innerText = lang.secondLLMApiKeyLabel;
   document.getElementById("originalContentLabel").innerText = lang.originalContentLabel;
+  document.getElementById("translationLanguageLabel").innerText = lang.translationLanguageLabel;
   document.getElementById("translateBtn").innerText = lang.translateButton;
   document.getElementById("translationResultLabel1").innerText = lang.translationResultLabel1;
   document.getElementById("translationResultLabel2").innerText = lang.translationResultLabel2;
@@ -96,13 +116,13 @@ Office.onReady((info) => {
     document.getElementById("translateBtn").onclick = translate;
     document.getElementById("insertBtn").onclick = insertTranslation1;
     document.getElementById("insertBtn2").onclick = insertTranslation2;
-    document.getElementById("languageSelector").onchange = () => {
-      const selectedLanguage = document.getElementById("languageSelector").value;
+    document.getElementById("uiLanguageSelector").onchange = () => {
+      const selectedLanguage = document.getElementById("uiLanguageSelector").value;
       updateUIText(selectedLanguage);
     };
 
     // Set initial UI text
-    const initialLanguage = document.getElementById("languageSelector").value;
+    const initialLanguage = document.getElementById("uiLanguageSelector").value;
     updateUIText(initialLanguage);
 
     // Load API keys from roaming settings
@@ -159,8 +179,8 @@ async function syncMailBody() {
 async function translate() {
   const text = document.getElementById("originalText").value;
   const status = document.getElementById("status");
-  const selectedLanguage = document.getElementById("languageSelector").value;
-  const lang = translations[selectedLanguage] || translations["English"];
+  const selectedUiLanguage = document.getElementById("uiLanguageSelector").value;
+  const lang = translations[selectedUiLanguage] || translations["English"];
 
   const openaiApiKey = document.getElementById("openaiApiKey").value;
   const secondLLMApiKey = document.getElementById("secondLLMApiKey").value;
@@ -188,6 +208,7 @@ async function translate() {
 
   let prompt1 = ""; // For GPT-4o-mini
   let prompt2 = ""; // For Claude (simulated)
+  const selectedLanguage = document.getElementById("languageSelector").value;
 
   switch (selectedLanguage) {
     case "Japanese":
@@ -285,8 +306,8 @@ function insertTranslation2() {
 }
 
 function insertTextIntoMail(textToInsert) {
-    const selectedLanguage = document.getElementById("languageSelector").value;
-    const lang = translations[selectedLanguage] || translations["English"];
+    const selectedUiLanguage = document.getElementById("uiLanguageSelector").value;
+    const lang = translations[selectedUiLanguage] || translations["English"];
     
     if (!textToInsert) return;
   
