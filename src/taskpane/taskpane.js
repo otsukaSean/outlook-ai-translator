@@ -1,6 +1,7 @@
 
 // Constants for API endpoints (can be made configurable later if needed)
 const OPENAI_API_ENDPOINT = "https://api.openai.com/v1/chat/completions";
+const CLAUDE_API_ENDPOINT = "https://api.anthropic.com/v1/messages";
 
 const translations = {
   "Chinese": {
@@ -8,7 +9,7 @@ const translations = {
     "uiLanguageSection": "UI 語言",
     "apiKeySectionTitle": "請填寫 API Key (避免硬寫在程式碼中)",
     "openaiApiKeyLabel": "OpenAI API Key (用於 GPT-4o-mini):",
-    "secondLLMApiKeyLabel": "第二個 LLM 的 API Key (例如 Claude, Gemini, 或另一個 OpenAI key):",
+    "secondLLMApiKeyLabel": "僅支援 Claude Key:",
     "originalContentLabel": "信件內容同步 (原文)",
     "translationLanguageLabel": "選擇翻譯語言",
     "translateButton": "使用 GPT-4o-mini 翻譯",
@@ -35,7 +36,7 @@ const translations = {
     "uiLanguageSection": "UI言語",
     "apiKeySectionTitle": "APIキーを入力してください（コードにハードコーディングしないでください）",
     "openaiApiKeyLabel": "OpenAI APIキー (GPT-4o-mini用):",
-    "secondLLMApiKeyLabel": "第二のLLMのAPIキー (例: Claude, Gemini, または別のOpenAIキー):",
+    "secondLLMApiKeyLabel": "Claude Keyのみ対応:",
     "originalContentLabel": "メール内容同期 (原文)",
     "translationLanguageLabel": "翻訳言語を選択",
     "translateButton": "GPT-4o-miniで翻訳",
@@ -62,7 +63,7 @@ const translations = {
     "uiLanguageSection": "UI Language",
     "apiKeySectionTitle": "Please fill in API Key (avoid hardcoding in the source code)",
     "openaiApiKeyLabel": "OpenAI API Key (for GPT-4o-mini):",
-    "secondLLMApiKeyLabel": "API Key for the second LLM (e.g., Claude, Gemini, or another OpenAI key):",
+    "secondLLMApiKeyLabel": "Claude Key only:",
     "originalContentLabel": "Email Content Sync (Original)",
     "translationLanguageLabel": "Select Translation Language",
     "translateButton": "Translate with GPT-4o-mini",
@@ -207,7 +208,7 @@ async function translate() {
   status.innerText = lang.statusTranslating;
 
   let prompt1 = ""; // For GPT-4o-mini
-  let prompt2 = ""; // For Claude (simulated)
+  let prompt2 = ""; // For Claude
   const selectedLanguage = document.getElementById("languageSelector").value;
 
   switch (selectedLanguage) {
@@ -234,7 +235,7 @@ async function translate() {
   }
 
   if (secondLLMApiKey) {
-    promises.push(callOpenAI(secondLLMApiKey, prompt2, text, "gpt-4o-mini").catch(e => ({ error: true, message: `翻譯 2 失敗: ${e.message}` })));
+    promises.push(callClaudeAPI(secondLLMApiKey, prompt2, text).catch(e => ({ error: true, message: `翻譯 2 失敗: ${e.message}` })));
     uiTargets.push({ textAreaId: 'translatedText2', buttonId: 'insertBtn2' });
   }
 
@@ -268,7 +269,7 @@ async function translate() {
 }
 
 async function callOpenAI(apiKey, prompt, text, model) {
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+  const response = await fetch(OPENAI_API_ENDPOINT, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -289,6 +290,32 @@ async function callOpenAI(apiKey, prompt, text, model) {
     return data.choices[0].message.content;
   } else {
     const errorMessage = data.error?.message || "API request failed.";
+    throw new Error(errorMessage);
+  }
+}
+
+async function callClaudeAPI(apiKey, prompt, text, model = "claude-3-5-sonnet") {
+  const response = await fetch(CLAUDE_API_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: model,
+      max_tokens: 1024,
+      messages: [
+        { role: "user", content: `${prompt}\n${text}` }
+      ]
+    })
+  });
+
+  const data = await response.json();
+  if (response.ok && data.content && data.content.length > 0) {
+    return data.content[0].text;
+  } else {
+    const errorMessage = data.error?.message || "Claude API request failed.";
     throw new Error(errorMessage);
   }
 }
