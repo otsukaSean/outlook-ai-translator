@@ -19,6 +19,7 @@ module.exports = async (env, options) => {
     entry: {
       polyfill: ["core-js/stable", "regenerator-runtime/runtime"],
       taskpane: ["./src/taskpane/taskpane.js", "./src/taskpane/taskpane.html"],
+      single_key_taskpane: ["./src/taskpane/single_key_taskpane.js", "./src/taskpane/single_key_taskpane.html"],
     },
     output: {
       clean: true,
@@ -54,6 +55,11 @@ module.exports = async (env, options) => {
         filename: "taskpane.html",
         template: "./src/taskpane/taskpane.html",
         chunks: ["polyfill", "taskpane"],
+      }),
+      new HtmlWebpackPlugin({
+        filename: "single_key_taskpane.html",
+        template: "./src/taskpane/single_key_taskpane.html",
+        chunks: ["polyfill", "single_key_taskpane"],
       }),
       new CopyWebpackPlugin({
         patterns: [
