@@ -13,7 +13,9 @@
   <SupportUrl DefaultValue="https://www.contoso.com/"/>
   <AppDomains>
     <AppDomain>otsuka.com.tw</AppDomain>
-    <AppDomain>otsukasean.github.io</AppDomain> <AppDomain>api.openai.com</AppDomain>
+    <AppDomain>otsukasean.github.io</AppDomain> 
+    <AppDomain>api.openai.com</AppDomain>
+    <AppDomain>api.anthropic.com</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Mailbox"/>

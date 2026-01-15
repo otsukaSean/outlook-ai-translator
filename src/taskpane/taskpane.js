@@ -1,4 +1,6 @@
 
+
+
 // Constants for API endpoints (can be made configurable later if needed)
 const OPENAI_API_ENDPOINT = "https://api.openai.com/v1/chat/completions";
 const CLAUDE_API_ENDPOINT = "https://api.anthropic.com/v1/messages";
@@ -294,13 +296,15 @@ async function callOpenAI(apiKey, prompt, text, model) {
   }
 }
 
-async function callClaudeAPI(apiKey, prompt, text, model = "claude-3-5-sonnet") {
+// 修改後的 callClaudeAPI 函式
+async function callClaudeAPI(apiKey, prompt, text, model = "claude-sonnet-4-5-20250929") {
   const response = await fetch(CLAUDE_API_ENDPOINT, {
     method: "POST",
     headers: {
       "x-api-key": apiKey,
       "anthropic-version": "2023-06-01",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "anthropic-dangerous-direct-browser-access": "true" // 必須保留此項以允許瀏覽器存取
     },
     body: JSON.stringify({
       model: model,
@@ -315,7 +319,8 @@ async function callClaudeAPI(apiKey, prompt, text, model = "claude-3-5-sonnet") 
   if (response.ok && data.content && data.content.length > 0) {
     return data.content[0].text;
   } else {
-    const errorMessage = data.error?.message || "Claude API request failed.";
+    // 增加更詳細的錯誤資訊輸出
+    const errorMessage = data.error?.message || `API 請求失敗 (Status: ${response.status})`;
     throw new Error(errorMessage);
   }
 }
