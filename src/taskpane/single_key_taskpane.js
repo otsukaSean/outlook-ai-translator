@@ -1,5 +1,4 @@
-
-// Constants for API endpoints (can be made configurable later if needed)
+// Constants for API endpoints
 const OPENAI_API_ENDPOINT = "https://api.openai.com/v1/chat/completions";
 
 const translations = {
@@ -99,39 +98,75 @@ Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
     document.getElementById("translateBtn").onclick = translate;
     document.getElementById("insertBtn").onclick = insertTranslation;
+    
+    // 1. 綁定 UI 語言選單：改變時儲存設定
     document.getElementById("uiLanguageSelector").onchange = () => {
       const selectedLanguage = document.getElementById("uiLanguageSelector").value;
       updateUIText(selectedLanguage);
+      saveSettings(); // 儲存偏好
     };
 
-    // Set initial UI text
-    const initialLanguage = document.getElementById("uiLanguageSelector").value;
-    updateUIText(initialLanguage);
+    // 2. 綁定翻譯目標語言選單：改變時儲存設定
+    document.getElementById("languageSelector").onchange = () => {
+      saveSettings(); // 儲存偏好
+    };
 
-    // Load API keys from roaming settings
-    loadApiKeys();
+    // 3. 讀取所有儲存的設定 (API Key, UI語言, 翻譯語言)
+    loadSettings();
 
     // 每 2 秒自動同步一次內容
     setInterval(syncMailBody, 2000);
   }
 });
 
-/** Load API keys from roaming settings */
-function loadApiKeys() {
+/** * 讀取設定 (API Key + 語言偏好)
+ * 讓使用者不用每次都重新選擇
+ */
+function loadSettings() {
+  // A. 讀取 API Key
   const openaiApiKey = Office.context.roamingSettings.get('openaiApiKey');
   if (openaiApiKey) {
     document.getElementById('openaiApiKey').value = openaiApiKey;
   }
+
+  // B. 讀取並應用 UI 語言
+  const savedUiLang = Office.context.roamingSettings.get('uiLanguage');
+  if (savedUiLang) {
+    // 如果有存過，就選取該語言並更新介面
+    document.getElementById("uiLanguageSelector").value = savedUiLang;
+    updateUIText(savedUiLang);
+  } else {
+    // 沒存過則使用預設值
+    const initialLanguage = document.getElementById("uiLanguageSelector").value;
+    updateUIText(initialLanguage);
+  }
+
+  // C. 讀取並應用翻譯目標語言
+  const savedTargetLang = Office.context.roamingSettings.get('translationLanguage');
+  if (savedTargetLang) {
+    document.getElementById("languageSelector").value = savedTargetLang;
+  }
 }
 
-/** Save API keys to roaming settings */
-function saveApiKeys(openaiApiKey) {
+/** * 儲存所有設定
+ * 包含：API Key (從輸入框讀取), UI語言, 翻譯目標語言
+ */
+function saveSettings() {
+  const openaiApiKey = document.getElementById('openaiApiKey').value;
+  const uiLang = document.getElementById("uiLanguageSelector").value;
+  const targetLang = document.getElementById("languageSelector").value;
+
+  // 設定到 RoamingSettings
   Office.context.roamingSettings.set('openaiApiKey', openaiApiKey);
+  Office.context.roamingSettings.set('uiLanguage', uiLang);
+  Office.context.roamingSettings.set('translationLanguage', targetLang);
+
+  // 執行非同步儲存
   Office.context.roamingSettings.saveAsync((result) => {
     if (result.status === Office.AsyncResultStatus.Failed) {
-      console.error('Failed to save API keys:', result.error.message);
+      console.error('Failed to save settings:', result.error.message);
     } else {
-      console.log('API keys saved.');
+      console.log('Settings saved.');
     }
   });
 }
@@ -142,6 +177,7 @@ async function syncMailBody() {
     Office.context.mailbox.item.body.getAsync(Office.CoercionType.Text, (result) => {
       if (result.status === Office.AsyncResultStatus.Succeeded) {
         const originalBox = document.getElementById("originalText");
+        // 只有在內容真的不同時才更新，避免游標跳動
         if (originalBox.value !== result.value) {
           originalBox.value = result.value;
         }
@@ -167,8 +203,9 @@ async function translate() {
     return;
   }
 
+  // 翻譯時順便再次儲存所有設定 (包含 Key)
   if (openaiApiKey) {
-    saveApiKeys(openaiApiKey);
+    saveSettings(); 
   } else {
     status.innerText = lang.statusMissingApiKey;
     return;
@@ -198,7 +235,6 @@ async function translate() {
     status.innerText = lang.statusSuccess;
   } catch (error) {
     console.error(error);
-
     document.getElementById("translatedText").value = error.message;
     status.innerText = lang.statusFail;
   }
